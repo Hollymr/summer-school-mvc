@@ -1,0 +1,28 @@
+﻿
+.jumbotron{
+    background-image:url(http://img07.deviantart.net/9965/i/2011/246/b/c/hogwarts_crest_grunge_wallpape_by_carvedincandy-d48rhf3.jpg);
+    background-size:cover;
+    background-position:center;
+    font-family:Impact;
+    font-weight:800;
+    font-size:36px;    
+    text-shadow: 10px 6px 2px #000000;
+    color:#dbd0d0;        
+}
+
+.jumbotron h1{
+    font-family:Impact;    
+}
+h2{
+    font-family:Impact;
+    text-align: center;    
+}
+.enroll p{
+    font-family: Impact;
+    font-size:16px;
+    text-align: center;
+}
+.enroll{
+    text-align:center;
+    font-size:200%;
+}

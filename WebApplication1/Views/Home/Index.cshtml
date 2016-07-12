@@ -1,7 +1,10 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-
+<head>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link href="style.css" rel="stylesheet" />
+</head>
 <div class="jumbotron">
     <h1>Summer School</h1>
     <p class="lead">Student enrollment.</p>
@@ -9,12 +12,16 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 enroll">
         <h2>@Html.ActionLink("Students","Index", "Students")</h2>
+        <span class="glyphicon glyphicon-circle-arrow-up"></span>
         <p>
-           Click here to enroll students and add enrollemnt fees!
+            <br/>
+                       Click here to enroll students and add enrollemnt fees!
         </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+      </div>
+
+        @*<p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Get more libraries</h2>
@@ -25,5 +32,6 @@
         <h2>Web Hosting</h2>
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+    </div>*@
+        
 </div>
