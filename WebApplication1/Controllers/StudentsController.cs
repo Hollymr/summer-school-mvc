@@ -55,52 +55,56 @@ namespace WebApplication1.Controllers
 
         //}
 
-       public void EnrollStudent()
+       public decimal EnrollStudent()
         {
             int? id = null;
             decimal cost = 200;
-            Student student = db.Students.Find(id);                     
+            Student student = db.Students.Find(id);
+            var fee = student.EnrollmentFee;
 
 
-            // special case malfoy
-            if (student.LastName.ToLower() == "malfoy")
-            {
-                Console.WriteLine("Student cannot be enrolled!");
-            }
+            //// special case malfoy
+            //if (student.LastName.ToLower() == "malfoy")
+            //{
+            //    Console.WriteLine("Student cannot be enrolled!");
+            //}
             // special case harry potter 
-            else if (student.LastName.ToLower() == "potter")
+           if (student.LastName.ToLower() == "potter")
             {
-                
+
                 student.EnrollmentFee = cost / 2;
-                
-            }           
+                return fee;
+
+            }
             // special case first initial same as last initial
             else if (student.FirstName.First() == student.LastName.First())
             {
 
                 student.EnrollmentFee = cost * .9m;
-                //Console.WriteLine(students[spot] + " is now enrolled at Hogwarts and owes £" + cost * .9);
+                return fee;
+
             }
             else
             {
-                student.EnrollmentFee = cost;
-                //Console.WriteLine(students[spot] + " is now enrolled at Hogwarts and owes £" + cost);
+                fee = cost;
+                return fee;
+
             }
+            
         }
-
-    
-
+   
         // POST: Students/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName")] Student student)
+        public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName, EnrollmentFee")] Student student)
         {
-            EnrollStudent();
-
+            
+               student.EnrollmentFee = EnrollStudent();            
+            
             if (ModelState.IsValid)
-            {
+            {                
                 db.Students.Add(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
