@@ -41,13 +41,64 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        //static int CountStudent()
+        //{
+        //    int count = 0;
+        //    for (int i = 0; i < student.Length; i++)
+        //    {
+        //        if (student[i] != null)
+        //        {
+        //            count++;
+        //        }
+        //    }
+        //    return count;
+
+        //}
+
+       public void EnrollStudent()
+        {
+            int? id = null;
+            decimal cost = 200;
+            Student student = db.Students.Find(id);                     
+
+
+            // special case malfoy
+            if (student.LastName.ToLower() == "malfoy")
+            {
+                Console.WriteLine("Student cannot be enrolled!");
+            }
+            // special case harry potter 
+            else if (student.LastName.ToLower() == "potter")
+            {
+                
+                student.EnrollmentFee = cost / 2;
+                
+            }           
+            // special case first initial same as last initial
+            else if (student.FirstName.First() == student.LastName.First())
+            {
+
+                student.EnrollmentFee = cost * .9m;
+                //Console.WriteLine(students[spot] + " is now enrolled at Hogwarts and owes £" + cost * .9);
+            }
+            else
+            {
+                student.EnrollmentFee = cost;
+                //Console.WriteLine(students[spot] + " is now enrolled at Hogwarts and owes £" + cost);
+            }
+        }
+
+    
+
         // POST: Students/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName,EnrollmentFee")] Student student)
+        public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName")] Student student)
         {
+            EnrollStudent();
+
             if (ModelState.IsValid)
             {
                 db.Students.Add(student);

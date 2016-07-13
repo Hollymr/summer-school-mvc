@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="13e8ae12ecc7406b885e32f8c27b5028" Name="Diagram1">
-        <EntityTypeShape EntityType="SummerSchoolMVCModel.Student" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SummerSchoolMVCModel.Student" Width="2" PointX="5.5" PointY="1.125" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
