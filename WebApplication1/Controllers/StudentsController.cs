@@ -41,54 +41,34 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        //static int CountStudent()
-        //{
-        //    int count = 0;
-        //    for (int i = 0; i < student.Length; i++)
-        //    {
-        //        if (student[i] != null)
-        //        {
-        //            count++;
-        //        }
-        //    }
-        //    return count;
 
-        //}
-
-       public decimal EnrollStudent()
-        {
-            int? id = null;
+        public decimal EnrollStudent(Student student)
+        {            
             decimal cost = 200;
-            Student student = db.Students.Find(id);
-            var fee = student.EnrollmentFee;
-
-
-            //// special case malfoy
-            //if (student.LastName.ToLower() == "malfoy")
-            //{
-            //    Console.WriteLine("Student cannot be enrolled!");
-            //}
-            // special case harry potter 
-           if (student.LastName.ToLower() == "potter")
+            var fee = cost;
+          
+                // special case harry potter 
+            if (student.LastName.ToLower() == "potter")
             {
-
-                student.EnrollmentFee = cost / 2;
+                fee = cost/2;
+                return fee;               
+            }                       
+            // special case longbottom
+            else if (student.LastName.ToLower() == "longbottom" && db.Students.Count() < 10)
+            {
+                fee = 0;
                 return fee;
-
             }
             // special case first initial same as last initial
             else if (student.FirstName.First() == student.LastName.First())
             {
-
-                student.EnrollmentFee = cost * .9m;
-                return fee;
-
+                fee = cost * .9m;
+                return fee;         
             }
             else
             {
                 fee = cost;
-                return fee;
-
+                return fee;         
             }
             
         }
@@ -99,14 +79,13 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName, EnrollmentFee")] Student student)
-        {
-            
-               student.EnrollmentFee = EnrollStudent();            
-            
+        {            
+
             if (ModelState.IsValid)
             {                
                 db.Students.Add(student);
-                db.SaveChanges();
+                student.EnrollmentFee = EnrollStudent(student);
+                db.SaveChanges();                
                 return RedirectToAction("Index");
             }
 
@@ -126,6 +105,17 @@ namespace WebApplication1.Controllers
                 return HttpNotFound();
             }
             return View(student);
+        }
+
+        public decimal TotalFees(Student student)
+        {
+            decimal runningTotal = 0;
+
+            foreach (decimal studentFee in Convert.ToString(student.EnrollmentFee))
+            {
+                runningTotal = runningTotal + studentFee;
+            }
+            return runningTotal;
         }
 
         // POST: Students/Edit/5
