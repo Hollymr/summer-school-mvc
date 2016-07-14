@@ -54,13 +54,14 @@ namespace WebApplication1.Controllers
                 return fee;               
             }                       
             // special case longbottom
-            else if (student.LastName.ToLower() == "longbottom" && db.Students.Count() < 10)
+            // SELECT COUNT (*) FROM Students; when using COUNT()
+            if (student.LastName.ToLower() == "longbottom" && db.Students.Count() < 10)
             {
                 fee = 0;
                 return fee;
             }
             // special case first initial same as last initial
-            else if (student.FirstName.First() == student.LastName.First())
+            if (student.FirstName.First() == student.LastName.First())
             {
                 fee = cost * .9m;
                 return fee;         
