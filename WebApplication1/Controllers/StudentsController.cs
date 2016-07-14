@@ -80,12 +80,12 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName, EnrollmentFee")] Student student)
-        {            
-
+        {
+            student.EnrollmentFee = EnrollStudent(student);
             if (ModelState.IsValid)
             {                
                 db.Students.Add(student);
-                student.EnrollmentFee = EnrollStudent(student);
+                //student.EnrollmentFee = EnrollStudent(student);
                 db.SaveChanges();                
                 return RedirectToAction("Index");
             }
