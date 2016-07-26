@@ -15,12 +15,28 @@ namespace WebApplication1.Controllers
         private SummerSchoolMVCEntities db = new SummerSchoolMVCEntities();
 
         // GET: Students
-        public ActionResult Index()
-        {
-            // look in index/ student 
-            
+        public ActionResult Index(string searchString)
+        { // look in index/ student 
+
+            var students = from item in db.Students
+                           select item;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                 students = from item in db.Students
+                               where item.LastName.Contains(searchString) ||
+                                     item.FirstName.Contains(searchString)
+                               select item;
+            }
+
+            int count = 20;
+            for (int i = 0; i <= count; i++)
+            {
+
+            }
+
             ViewBag.TotalEnrollmentFee = TotalFees();
-            return View(db.Students.ToList());
+            return View(students);
         }
 
         // GET: Students/Details/5
