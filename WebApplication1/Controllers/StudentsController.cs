@@ -17,6 +17,9 @@ namespace WebApplication1.Controllers
         // GET: Students
         public ActionResult Index()
         {
+            // look in index/ student 
+            
+            ViewBag.TotalEnrollmentFee = TotalFees();
             return View(db.Students.ToList());
         }
 
@@ -42,38 +45,45 @@ namespace WebApplication1.Controllers
         }
 
 
-        public decimal EnrollStudent(Student student)
-        {            
-            decimal cost = 200;
-            var fee = cost;
+        int EnrollStudent(string firstName, string lastName)
+        {
+            double cost = 200;
+            
           
                 // special case harry potter 
-            if (student.LastName.ToLower() == "potter")
+            if (lastName.ToLower() == "potter")
             {
-                fee = cost/2;
-                return fee;               
-            }                       
+                cost *= 0.5;              
+            }
+            int numberOfStudents = db.Students.Count();                    
             // special case longbottom
             // SELECT COUNT (*) FROM Students; when using COUNT()
-            if (student.LastName.ToLower() == "longbottom" && db.Students.Count() < 10)
+            if (lastName.ToLower() == "longbottom" && numberOfStudents <= 10)
             {
-                fee = 0;
-                return fee;
+                cost = 0;
             }
             // special case first initial same as last initial
-            if (student.FirstName.First() == student.LastName.First())
+            if (firstName.ToLower()[0] == lastName.ToLower()[0])
             {
-                fee = cost * .9m;
-                return fee;         
+                cost = 0.9 * cost;         
             }
-            else
-            {
-                fee = cost;
-                return fee;         
+            return (int)cost;        
             }
             
+        
+        //calculate enrollment fee
+        public decimal TotalFees()
+        {
+            ViewBag.Message = "Not allowed";
+            decimal runningTotal = 0;
+
+            foreach (Student student in db.Students)
+            {
+                runningTotal = runningTotal + student.EnrollmentFee;
+            }
+            return runningTotal;
         }
-   
+
         // POST: Students/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -81,11 +91,10 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName, EnrollmentFee")] Student student)
         {
-            student.EnrollmentFee = EnrollStudent(student);
+            student.EnrollmentFee = EnrollStudent(student.FirstName, student.LastName);
             if (ModelState.IsValid)
             {                
                 db.Students.Add(student);
-                //student.EnrollmentFee = EnrollStudent(student);
                 db.SaveChanges();                
                 return RedirectToAction("Index");
             }
@@ -107,17 +116,7 @@ namespace WebApplication1.Controllers
             }
             return View(student);
         }
-
-        public decimal TotalFees(Student student)
-        {
-            decimal runningTotal = 0;
-
-            foreach (decimal studentFee in Convert.ToString(student.EnrollmentFee))
-            {
-                runningTotal = runningTotal + studentFee;
-            }
-            return runningTotal;
-        }
+    
 
         // POST: Students/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
