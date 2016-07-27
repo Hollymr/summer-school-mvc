@@ -29,15 +29,28 @@ namespace WebApplication1.Controllers
                                select item;
             }
 
-            int count = 20;
-            for (int i = 0; i <= count; i++)
-            {
 
-            }
 
+
+            //int numberOfStudents = db.Students.Count(); 
+            //int count = 0;
+            //for (int i = 0; i <= 15; i++)
+            //{
+            //    if (students != null)
+            //    {
+            //        count++;
+            //    }
+            //    if (count == i)
+            //    {
+
+            //    }
+            //}
+            ViewBag.MyMessageToUsers = EnrollStudent("", "");
             ViewBag.TotalEnrollmentFee = TotalFees();
             return View(students);
         }
+      
+
 
         // GET: Students/Details/5
         public ActionResult Details(int? id)
@@ -64,9 +77,9 @@ namespace WebApplication1.Controllers
         int EnrollStudent(string firstName, string lastName)
         {
             double cost = 200;
-            
-          
-                // special case harry potter 
+           
+
+            // special case harry potter 
             if (lastName.ToLower() == "potter")
             {
                 cost *= 0.5;              
@@ -83,6 +96,17 @@ namespace WebApplication1.Controllers
             {
                 cost = 0.9 * cost;         
             }
+            // special case tom/riddle/voldemort
+            if (lastName.ToLower() == "tom" ||
+             firstName.ToLower() == "tom" ||
+             lastName.ToLower() == "riddle" ||
+             firstName.ToLower() == "riddle" ||
+             firstName.ToLower() == "voldemort" ||
+             lastName.ToLower() == "voldemort")
+            {
+                ViewBag.MyMessageToUsers = "RED ALERT!!!HE WHO MUST NOT BE NAMED!!!";
+            }
+
             return (int)cost;        
             }
             

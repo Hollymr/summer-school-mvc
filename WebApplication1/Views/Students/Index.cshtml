@@ -13,7 +13,7 @@
 @using (Html.BeginForm())
 {
 <p>
-    Search for: @Html.TextBox("searchString") <input Type= "submit" value= "Search"/>
+    Find by name: @Html.TextBox("searchString") <input Type= "submit" value= "Search"/>
 </p>
 }
 
@@ -32,10 +32,15 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
+            
+            @ViewBag.MyMessageToUsers
             @Html.DisplayFor(modelItem => item.FirstName)
+           
+            
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.LastName)
