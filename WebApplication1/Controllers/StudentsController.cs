@@ -29,9 +29,6 @@ namespace WebApplication1.Controllers
                                select item;
             }
 
-
-
-
             //int numberOfStudents = db.Students.Count(); 
             //int count = 0;
             //for (int i = 0; i <= 15; i++)
@@ -45,7 +42,7 @@ namespace WebApplication1.Controllers
 
             //    }
             //}
-            ViewBag.MyMessageToUsers = EnrollStudent("", "");
+           
             ViewBag.TotalEnrollmentFee = TotalFees();
             return View(students);
         }
@@ -77,14 +74,14 @@ namespace WebApplication1.Controllers
         int EnrollStudent(string firstName, string lastName)
         {
             double cost = 200;
-           
+
 
             // special case harry potter 
             if (lastName.ToLower() == "potter")
             {
-                cost *= 0.5;              
+                cost *= 0.5;
             }
-            int numberOfStudents = db.Students.Count();                    
+            int numberOfStudents = db.Students.Count();
             // special case longbottom
             // SELECT COUNT (*) FROM Students; when using COUNT()
             if (lastName.ToLower() == "longbottom" && numberOfStudents <= 10)
@@ -94,23 +91,12 @@ namespace WebApplication1.Controllers
             // special case first initial same as last initial
             if (firstName.ToLower()[0] == lastName.ToLower()[0])
             {
-                cost = 0.9 * cost;         
+                cost = 0.9 * cost;
             }
-            // special case tom/riddle/voldemort
-            if (lastName.ToLower() == "tom" ||
-             firstName.ToLower() == "tom" ||
-             lastName.ToLower() == "riddle" ||
-             firstName.ToLower() == "riddle" ||
-             firstName.ToLower() == "voldemort" ||
-             lastName.ToLower() == "voldemort")
-            {
-                ViewBag.MyMessageToUsers = "RED ALERT!!!HE WHO MUST NOT BE NAMED!!!";
-            }
+            return (int)cost;
+        }
 
-            return (int)cost;        
-            }
-            
-        
+
         //calculate enrollment fee
         public decimal TotalFees()
         {
@@ -129,8 +115,26 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName, EnrollmentFee")] Student student)
+        public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName,EnrollmentFee")] Student student)
         {
+
+            // special case tom/riddle/voldemort
+            if (student.LastName.ToLower() == "tom" ||
+             student.FirstName.ToLower() == "tom" ||
+             student.LastName.ToLower() == "riddle" ||
+             student.FirstName.ToLower() == "riddle" ||
+             student.FirstName.ToLower() == "voldemort" ||
+             student.LastName.ToLower() == "voldemort")
+            {
+                return View("voldemort");
+            }
+
+            // special case malfoy
+            if (student.LastName.ToLower() == "malfoy")
+            {
+                return View("malfoy");
+            }
+
             student.EnrollmentFee = EnrollStudent(student.FirstName, student.LastName);
             if (ModelState.IsValid)
             {                
