@@ -13,6 +13,7 @@ namespace WebApplication1.Controllers
     public class StudentsController : Controller
     {
         private SummerSchoolMVCEntities db = new SummerSchoolMVCEntities();
+        private int MaximumEnrollment = 15;
 
         // GET: Students
         public ActionResult Index(string searchString)
@@ -33,30 +34,19 @@ namespace WebApplication1.Controllers
 
             ViewBag.TotalEnrollmentFee = TotalFees();
             // setting max enrollment 
-            ViewBag.MaximumEnrollment = 15;
+            ViewBag.MaximumEnrollment = MaximumEnrollment;
+            ViewBag.CurrentEnrollment = db.Students.Count();
             return View(students);
         }
-      
-
-
-        // GET: Students/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return HttpNotFound();
-            }
-            return View(student);
-        }
+  
 
         // GET: Students/Create
         public ActionResult Create()
         {
+            if (db.Students.Count() >= MaximumEnrollment)
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
@@ -90,7 +80,7 @@ namespace WebApplication1.Controllers
         //calculate enrollment fee
         public decimal TotalFees()
         {
-            ViewBag.Message = "Not allowed";
+           
             decimal runningTotal = 0;
 
             foreach (Student student in db.Students)
@@ -107,29 +97,37 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StudentID,FirstName,LastName,EnrollmentFee")] Student student)
         {
-
-            // special case tom/riddle/voldemort
-            if (student.LastName.ToLower() == "tom" ||
-             student.FirstName.ToLower() == "tom" ||
-             student.LastName.ToLower() == "riddle" ||
-             student.FirstName.ToLower() == "riddle" ||
-             student.FirstName.ToLower() == "voldemort" ||
-             student.LastName.ToLower() == "voldemort")
+            if (db.Students.Count() >= MaximumEnrollment)
             {
-                return View("voldemort");
+                return RedirectToAction("Index");
             }
+
 
             // special case malfoy
             if (student.LastName.ToLower() == "malfoy")
             {
+                
                 return View("malfoy");
+                
             }
 
             student.EnrollmentFee = EnrollStudent(student.FirstName, student.LastName);
             if (ModelState.IsValid)
             {                
                 db.Students.Add(student);
-                db.SaveChanges();                
+                db.SaveChanges();
+                //placing it here allows us to still let student enroll but displays warning first!
+                // special case tom/riddle/voldemort
+                if (student.LastName.ToLower() == "tom" ||
+                 student.FirstName.ToLower() == "tom" ||
+                 student.LastName.ToLower() == "riddle" ||
+                 student.FirstName.ToLower() == "riddle" ||
+                 student.FirstName.ToLower() == "voldemort" ||
+                 student.LastName.ToLower() == "voldemort")
+                {
+                    return View("voldemort");
+                }
+
                 return RedirectToAction("Index");
             }
 

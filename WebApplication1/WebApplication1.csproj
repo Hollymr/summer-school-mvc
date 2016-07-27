@@ -290,11 +290,10 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Students\Create.cshtml" />
     <Content Include="Views\Students\Delete.cshtml" />
-    <Content Include="Views\Students\Details.cshtml" />
     <Content Include="Views\Students\Edit.cshtml" />
     <Content Include="Views\Students\Index.cshtml" />
-    <Content Include="Views\Shared\voldemort.cshtml" />
-    <Content Include="Views\Shared\malfoy.cshtml" />
+    <Content Include="Views\Students\voldemort.cshtml" />
+    <Content Include="Views\Students\malfoy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
