@@ -7,9 +7,22 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Enroll", "Create")
+    @* hiding enrollment link when enrollment is reached *@
+    @* Can use model to count, model to count collections  *@
+
+    @if (Model.Count() < ViewBag.MaximumEnrollment)
+    {
+        @Html.ActionLink("Enroll", "Create")
+    }
+    else
+    {
+        <span>Enrollment is closed.</span>
+    }
+
+
 </p>
 
+@*search box*@
 @using (Html.BeginForm())
 {
 <p>
@@ -35,12 +48,8 @@
 @foreach (var item in Model)
 {
     <tr>
-        <td>
-            
-            @ViewBag.MyMessageToUsers
-            @Html.DisplayFor(modelItem => item.FirstName)
-           
-            
+        <td>                        
+            @Html.DisplayFor(modelItem => item.FirstName)            
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.LastName)

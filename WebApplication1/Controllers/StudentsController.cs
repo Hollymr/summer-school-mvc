@@ -17,33 +17,23 @@ namespace WebApplication1.Controllers
         // GET: Students
         public ActionResult Index(string searchString)
         { // look in index/ student 
-
+            // select ALL students
+            //so we can use it whether or not we are filtering 
             var students = from item in db.Students
                            select item;
 
+            // filtering students bases on search
             if (!String.IsNullOrEmpty(searchString))
             {
-                 students = from item in db.Students
+                 students = from item in students
                                where item.LastName.Contains(searchString) ||
                                      item.FirstName.Contains(searchString)
                                select item;
             }
 
-            //int numberOfStudents = db.Students.Count(); 
-            //int count = 0;
-            //for (int i = 0; i <= 15; i++)
-            //{
-            //    if (students != null)
-            //    {
-            //        count++;
-            //    }
-            //    if (count == i)
-            //    {
-
-            //    }
-            //}
-           
             ViewBag.TotalEnrollmentFee = TotalFees();
+            // setting max enrollment 
+            ViewBag.MaximumEnrollment = 15;
             return View(students);
         }
       
